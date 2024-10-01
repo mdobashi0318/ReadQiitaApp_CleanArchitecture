@@ -609,7 +609,7 @@
 			repositoryURL = "https://github.com/realm/realm-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 10.54.0;
+				version = 10.43.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
