@@ -14,6 +14,3 @@ struct Article: Codable {
     let url: String
     let id: String
 }
-
-
-extension Article: Sendable {  }
