@@ -59,7 +59,16 @@ extension ArticleListViewController: UITableViewDataSource, UITableViewDelegate 
         
         return cell
     }
+ 
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let article = presenter.model[indexPath.row]
+        let vc = ArticleDetailsViewController()
+        vc.initPresenter(.init(id: article.id, articleTitle: article.title, url: article.url))
+        navigationController?.pushViewController(vc, animated: true)
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
     
 }
 
