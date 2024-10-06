@@ -18,7 +18,7 @@ class ArticleListPresenter: ArticleListPresenterProtocol {
     
     private let useCase = ArticleListUseCase()
     
-    private(set) var model: [Article] = []
+    private(set) var model: [ArticleListRow] = []
     
     private let disposeBag = DisposeBag()
     

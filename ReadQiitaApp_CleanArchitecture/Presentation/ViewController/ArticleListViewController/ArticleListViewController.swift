@@ -27,6 +27,8 @@ class ArticleListViewController: UIViewController {
     private func initTableView() {
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.register(UINib(nibName: "ArticleCell", bundle: nil), forCellReuseIdentifier: "ArticleCell")
+        
         
     }
     
@@ -54,9 +56,11 @@ extension ArticleListViewController: UITableViewDataSource, UITableViewDelegate 
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = presenter.model[indexPath.row].title
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleCell") as? ArticleCell else {
+            return UITableViewCell()
+        }
         
+        cell.setModel(article: presenter.model[indexPath.row])
         return cell
     }
  
