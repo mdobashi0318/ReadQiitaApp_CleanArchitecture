@@ -19,6 +19,7 @@ class ArticleListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        initNavigationItem()
         initTableView()
         fetchArticles()
     }
@@ -28,16 +29,28 @@ class ArticleListViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "ArticleCell", bundle: nil), forCellReuseIdentifier: "ArticleCell")
-        
-        
+                
+    }
+    
+    private func initNavigationItem() {
+        navigationItem.title = "ReadQiitaApp"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "bookmark.fill"), style: .plain, target: nil, action: nil)
+        navigationItem.rightBarButtonItem?.rx
+            .tap
+            .subscribe(onNext: {
+                let navi = UINavigationController(rootViewController: BookmarkListViewController())
+                self.navigationController?.present(navi, animated: true)
+            })
+            .disposed(by: disposeBag)
     }
     
     
     private func fetchArticles() {
+        Indicator.show(self.view)
         presenter.fetchArticles()
             .subscribe(onNext: {
                 self.tableView.reloadData()
-                
+                Indicator.dismiss()
             })
             .disposed(by: disposeBag)
     }
