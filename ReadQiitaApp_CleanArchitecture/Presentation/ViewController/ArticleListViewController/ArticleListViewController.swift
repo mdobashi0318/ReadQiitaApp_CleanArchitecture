@@ -39,6 +39,7 @@ class ArticleListViewController: UIViewController {
             .tap
             .subscribe(onNext: {
                 let navi = UINavigationController(rootViewController: BookmarkListViewController())
+                navi.modalPresentationStyle = .fullScreen
                 self.navigationController?.present(navi, animated: true)
             })
             .disposed(by: disposeBag)

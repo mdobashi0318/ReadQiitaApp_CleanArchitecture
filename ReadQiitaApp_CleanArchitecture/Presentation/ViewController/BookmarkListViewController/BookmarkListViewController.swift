@@ -6,26 +6,46 @@
 //
 
 import UIKit
+import RxSwift
 
 class BookmarkListViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
     private let presenter = BookmarkListPresenter()
+    
+    private let disposeBag = DisposeBag()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = "ブックマーク"
-        presenter.delegate = self
-        presenter.fetchAllBookmark()
+        initNavigationItem()
         initTableView()
+        initPresenter()
     }
     
     private func initTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+    }
+    
+    
+    private func initNavigationItem() {
+        navigationItem.title = "ブックマーク"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: nil, action: nil)
+        navigationItem.leftBarButtonItem?.rx
+            .tap
+            .subscribe(onNext: {
+                self.navigationController?.dismiss(animated: true)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    
+    private func initPresenter() {
+        presenter.delegate = self
+        presenter.fetchAllBookmark()
     }
 
 
