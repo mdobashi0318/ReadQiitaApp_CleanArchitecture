@@ -87,7 +87,9 @@ extension BookmarkListViewController: BookmarkListPresenterDelegate {
     
     
     func emptyData() {
-        AlertManager.showAlert(self, type: .ok, message: "ブックマークがありません")
+        AlertManager.showAlert(self, type: .ok, message: "ブックマークがありません", didTapPositiveButton: { _ in
+            self.navigationController?.dismiss(animated: true)
+        })
     }
     
     

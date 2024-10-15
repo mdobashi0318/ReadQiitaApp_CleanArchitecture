@@ -69,12 +69,13 @@ class RLMBookmark: Object {
     
     static func delete(_ bookmark: RLMBookmark) throws(DBError) {
         do {
-            guard let realm else {
+            guard let realm,
+            let model = RLMBookmark.find(id: bookmark.id) else {
                 throw DBError(message: "初期化エラー")
             }
-            
+             
             try realm.write {
-                realm.delete(bookmark)
+                realm.delete(model)
             }
         } catch {
             throw DBError(message: "削除エラー")

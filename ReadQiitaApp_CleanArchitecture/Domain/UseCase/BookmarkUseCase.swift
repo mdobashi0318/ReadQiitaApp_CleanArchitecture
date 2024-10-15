@@ -10,6 +10,7 @@ import Foundation
 
 protocol BookmarkUseCaseProtocol {
     func fetchAllBookmark() -> [Bookmark]
+    func fetchBookmark(id: String) -> Bookmark?
     func addBookmark(_ bookmark: Bookmark) throws(DBError)
     func deleteBookmark(_ bookmark: Bookmark) throws(DBError)
 }
@@ -20,6 +21,10 @@ struct BookmarkUseCase: BookmarkUseCaseProtocol {
     
     func fetchAllBookmark() -> [Bookmark] {
         repository.fetccBookmarks()
+    }
+    
+    func fetchBookmark(id: String) -> Bookmark? {
+        repository.fetchBookmark(id: id)
     }
     
     func addBookmark(_ bookmark: Bookmark) throws(DBError) {

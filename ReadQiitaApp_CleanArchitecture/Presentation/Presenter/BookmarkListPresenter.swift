@@ -30,8 +30,8 @@ class BookmarkListPresenter: BookmarkListPresenterProtocol {
 
     
     func fetchAllBookmark() {
-//        model = useCase.fetchAllBookmark()
-        model = Bookmark.mock
+        model = useCase.fetchAllBookmark()
+//        model = Bookmark.mock
         if model.isEmpty {
             delegate.emptyData()
         } else {

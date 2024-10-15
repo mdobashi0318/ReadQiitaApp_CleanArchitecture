@@ -9,6 +9,7 @@ import Foundation
 
 protocol BookmarkDataStoreProtocol {
     func fetccBookmarks() -> [Bookmark]
+    func fetccBookmark(id: String) -> Bookmark?
     func addBookmark(_ bookmark: Bookmark) throws(DBError)
     func deleteBookmark(_ bookmark: Bookmark) throws(DBError)
 }
@@ -17,6 +18,11 @@ struct BookmarkDataStore: BookmarkDataStoreProtocol {
     func fetccBookmarks() -> [Bookmark] {
         Bookmark.getAll()
     }
+    
+    func fetccBookmark(id: String) -> Bookmark? {
+        Bookmark.find(id)
+    }
+    
     
     func addBookmark(_ bookmark: Bookmark) throws(DBError) {
         try Bookmark.add(bookmark)

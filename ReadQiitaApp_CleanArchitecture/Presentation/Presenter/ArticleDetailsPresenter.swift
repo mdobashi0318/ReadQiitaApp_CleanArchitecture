@@ -8,22 +8,44 @@
 import Foundation
 
 
+@MainActor
 protocol ArticleDetailsPresenterProtocol {
     
-    func addBookmark(bookmark: Bookmark) -> Bool
+    func fetchBookmark()
     
-    func deleteBookmark(bookmark: Bookmark) -> Bool
+    func addBookmark(bookmark: Bookmark)
+    
+    func deleteBookmark(bookmark: Bookmark)
     
 }
 
 
-struct ArticleDetailsPresenter: ArticleDetailsPresenterProtocol {
+@MainActor
+protocol ArticleDetailsPresenterDelegate: AnyObject {
+    func fetchBookmark(isEmpty: Bool)
+    
+    func addSuccess()
+    func addFailure(error: DBError)
+    
+    func deleteSuccess()
+    func deleteFailure(error: DBError)
+    
+}
+
+
+class ArticleDetailsPresenter: ArticleDetailsPresenterProtocol {
 
     private(set) var id: String = ""
     
     private(set) var articleTitle: String = ""
     
     private(set) var url: String = ""
+    
+    private var bookmark: Bookmark?
+    
+    private let useCase =  BookmarkUseCase()
+    
+    weak var delegate: ArticleDetailsPresenterDelegate!
     
     
     init(id: String, articleTitle: String, url: String) {
@@ -32,12 +54,36 @@ struct ArticleDetailsPresenter: ArticleDetailsPresenterProtocol {
         self.url = url
     }
     
-    func addBookmark(bookmark: Bookmark) -> Bool {
-        true
+    
+    func fetchBookmark() {
+        guard let bookmark = useCase.fetchBookmark(id: id) else {
+            delegate.fetchBookmark(isEmpty: true)
+            return
+        }
+        
+        delegate.fetchBookmark(isEmpty: false)
+        self.bookmark = bookmark
     }
     
-    func deleteBookmark(bookmark: Bookmark) -> Bool {
-        true
+    
+    func addBookmark(bookmark: Bookmark) {
+        do {
+             try useCase.addBookmark(bookmark)
+            delegate.addSuccess()
+        } catch {
+            delegate.addFailure(error: error)
+        }
+        
+    }
+    
+    func deleteBookmark(bookmark: Bookmark) {
+        do {
+            try useCase.deleteBookmark(bookmark)
+            delegate.deleteSuccess()
+        } catch {
+            delegate.deleteFailure(error: error)
+        }
+        
     }
     
 }
