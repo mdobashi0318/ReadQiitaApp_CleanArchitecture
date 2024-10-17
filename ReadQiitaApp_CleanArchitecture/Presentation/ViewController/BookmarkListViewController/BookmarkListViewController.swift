@@ -72,6 +72,15 @@ extension BookmarkListViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let bookmark = presenter.model[indexPath.row]
+        let vc = ArticleDetailsViewController()
+        vc.initPresenter(.init(id: bookmark.id, articleTitle: bookmark.title, url: bookmark.url))
+        navigationController?.pushViewController(vc, animated: true)
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
 }
 
 
