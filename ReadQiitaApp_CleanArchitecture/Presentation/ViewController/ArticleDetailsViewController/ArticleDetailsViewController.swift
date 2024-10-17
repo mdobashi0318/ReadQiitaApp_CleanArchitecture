@@ -24,10 +24,7 @@ class ArticleDetailsViewController: UIViewController {
         barButtonItem.rx
             .tap
             .subscribe(onNext: {
-                self.presenter.addBookmark(bookmark: Bookmark(id: self.presenter.id,
-                                                              title: self.presenter.articleTitle,
-                                                              url: self.presenter.url)
-                )
+                self.presenter.addBookmark()
             })
             .disposed(by: disposeBag)
         
@@ -40,10 +37,7 @@ class ArticleDetailsViewController: UIViewController {
         barButtonItem.rx
             .tap
             .subscribe(onNext: {
-                self.presenter.deleteBookmark(bookmark: Bookmark(id: self.presenter.id,
-                                                              title: self.presenter.articleTitle,
-                                                              url: self.presenter.url)
-                )
+                self.presenter.deleteBookmark()
             })
             .disposed(by: disposeBag)
         
@@ -69,7 +63,7 @@ class ArticleDetailsViewController: UIViewController {
     
     
     private func initNavigationItem() {
-        navigationController?.title = presenter.articleTitle
+        navigationItem.title = presenter.articleTitle
         navigationItem.rightBarButtonItem = mode == .add ? addBarButtonItem : deleteBarButtonItem
     }
     

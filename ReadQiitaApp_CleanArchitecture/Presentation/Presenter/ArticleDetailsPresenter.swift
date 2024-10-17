@@ -8,17 +8,21 @@
 import Foundation
 
 
+// MARK: - ArticleDetailsPresenterProtocol
+
 @MainActor
 protocol ArticleDetailsPresenterProtocol {
     
     func fetchBookmark()
     
-    func addBookmark(bookmark: Bookmark)
+    func addBookmark()
     
-    func deleteBookmark(bookmark: Bookmark)
+    func deleteBookmark()
     
 }
 
+
+// MARK: - ArticleDetailsPresenterDelegate
 
 @MainActor
 protocol ArticleDetailsPresenterDelegate: AnyObject {
@@ -33,13 +37,15 @@ protocol ArticleDetailsPresenterDelegate: AnyObject {
 }
 
 
-class ArticleDetailsPresenter: ArticleDetailsPresenterProtocol {
+// MARK: - ArticleDetailsPresenter
 
-    private(set) var id: String = ""
+class ArticleDetailsPresenter {
+
+    let id: String
     
-    private(set) var articleTitle: String = ""
+    let articleTitle: String
     
-    private(set) var url: String = ""
+    let url: String
     
     private var bookmark: Bookmark?
     
@@ -55,6 +61,14 @@ class ArticleDetailsPresenter: ArticleDetailsPresenterProtocol {
     }
     
     
+}
+
+
+
+// MARK: - ArticleDetailsPresenterProtocol
+
+extension ArticleDetailsPresenter: ArticleDetailsPresenterProtocol {
+    
     func fetchBookmark() {
         guard let bookmark = useCase.fetchBookmark(id: id) else {
             delegate.fetchBookmark(isEmpty: true)
@@ -66,24 +80,26 @@ class ArticleDetailsPresenter: ArticleDetailsPresenterProtocol {
     }
     
     
-    func addBookmark(bookmark: Bookmark) {
+    func addBookmark() {
         do {
-             try useCase.addBookmark(bookmark)
+             try useCase.addBookmark(Bookmark(id: id, title: articleTitle, url: url))
             delegate.addSuccess()
+            
         } catch {
             delegate.addFailure(error: error)
         }
         
     }
     
-    func deleteBookmark(bookmark: Bookmark) {
+    
+    func deleteBookmark() {
         do {
-            try useCase.deleteBookmark(bookmark)
+            try useCase.deleteBookmark(Bookmark(id: id, title: articleTitle, url: url))
             delegate.deleteSuccess()
+            
         } catch {
             delegate.deleteFailure(error: error)
         }
         
     }
-    
 }
