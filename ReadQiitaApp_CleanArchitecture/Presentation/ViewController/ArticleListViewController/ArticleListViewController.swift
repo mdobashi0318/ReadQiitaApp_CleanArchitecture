@@ -29,8 +29,22 @@ class ArticleListViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "ArticleCell", bundle: nil), forCellReuseIdentifier: "ArticleCell")
-                
+        
+        // リフレッシュコントロール
+        let refreshControl = UIRefreshControl()
+        tableView.refreshControl = refreshControl
+        refreshControl.rx.controlEvent(.valueChanged)
+            .subscribe(onNext: { [weak self] in
+                guard let self else {
+                    refreshControl.endRefreshing()
+                    return
+                }
+                self.fetchArticles()
+                refreshControl.endRefreshing()
+            })
+            .disposed(by: disposeBag)
     }
+    
     
     private func initNavigationItem() {
         navigationItem.title = "ReadQiitaApp"
