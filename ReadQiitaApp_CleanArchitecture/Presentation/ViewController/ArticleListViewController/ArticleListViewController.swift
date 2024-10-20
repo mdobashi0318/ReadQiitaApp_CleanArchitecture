@@ -14,6 +14,8 @@ class ArticleListViewController: UIViewController {
     
     private let presenter: ArticleListPresenter = ArticleListPresenter()
     
+    private let searchController = UISearchController()
+    
     private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
@@ -21,6 +23,7 @@ class ArticleListViewController: UIViewController {
         
         initNavigationItem()
         initTableView()
+        initSearchBar()
         fetchArticles()
     }
 
@@ -41,6 +44,27 @@ class ArticleListViewController: UIViewController {
                 }
                 self.fetchArticles()
                 refreshControl.endRefreshing()
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    
+    private func initSearchBar() {
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        searchController.searchBar.placeholder = "検索するキーワードを入力してください"
+        searchController.searchBar.rx
+            .text
+            .orEmpty
+            .bind(to: presenter.searchText)
+            .disposed(by: disposeBag)
+        
+        
+        searchController.searchBar.rx
+            .searchButtonClicked
+            .subscribe(onNext: {
+                print("text: \(self.presenter.searchText.value)")
+                self.fetchArticles()
             })
             .disposed(by: disposeBag)
     }

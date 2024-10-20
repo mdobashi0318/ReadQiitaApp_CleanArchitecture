@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 protocol ArticleListUseCaseProtocol {
-    func fetchArticles() -> Observable<[ArticleListRow]>
+    func fetchArticles(searchText: String) -> Observable<[ArticleListRow]>
 }
 
 
@@ -17,9 +17,9 @@ struct ArticleListUseCase: ArticleListUseCaseProtocol {
     
     private let repository = ArticleListRepository()
     
-    func fetchArticles() -> Observable<[ArticleListRow]> {
+    func fetchArticles(searchText: String) -> Observable<[ArticleListRow]> {
         Observable.create { observable in
-            _ = self.repository.fetchArticles()
+            _ = self.repository.fetchArticles(searchText: searchText)
                 .subscribe(onNext: {
                     let translater = ArticleListTranslater()
                     observable.onNext(translater.translaterArticleRow(articles: $0))

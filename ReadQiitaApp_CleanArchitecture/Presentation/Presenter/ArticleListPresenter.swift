@@ -7,7 +7,7 @@
 
 import Foundation
 import RxSwift
-
+import RxCocoa
 
 protocol ArticleListPresenterProtocol {
     func fetchArticles() -> Observable<Void>
@@ -22,9 +22,11 @@ class ArticleListPresenter: ArticleListPresenterProtocol {
     
     private let disposeBag = DisposeBag()
     
+    let searchText: BehaviorRelay<String> = .init(value: "")
+    
     func fetchArticles() -> Observable<Void> {
         Observable.create { observable in
-            self.useCase.fetchArticles()
+            self.useCase.fetchArticles(searchText: self.searchText.value)
                 .subscribe(onNext: {
                     self.model = $0
                     observable.onNext(Void())

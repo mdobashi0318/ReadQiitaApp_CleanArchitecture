@@ -10,7 +10,7 @@ import RxSwift
 
 
 protocol ArticleListRepositoryProtocol {
-    func fetchArticles() -> Observable<[Article]>
+    func fetchArticles(searchText: String) -> Observable<[Article]>
 }
 
 
@@ -18,9 +18,9 @@ struct ArticleListRepository: ArticleListRepositoryProtocol {
     
     private let dataStore = ArticleDataStore()
     
-    func fetchArticles() -> Observable<[Article]> {
+    func fetchArticles(searchText: String) -> Observable<[Article]> {
         Observable.create { observable in
-            dataStore.getArticleList(success: {
+            dataStore.getArticleList(searchText: searchText, success: {
                 observable.onNext($0)
                 
             }, failure: { _, _ in

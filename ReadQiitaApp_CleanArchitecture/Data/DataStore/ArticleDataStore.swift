@@ -10,7 +10,7 @@ import RxCocoa
 import RxSwift
 
 protocol ArticleDataStoreProtocol {
-    func getArticleList(success: @escaping ([Article]) -> Void, failure: @escaping (String, ErrorResponse.ErrorType) -> Void)
+    func getArticleList(searchText: String, success: @escaping ([Article]) -> Void, failure: @escaping (String, ErrorResponse.ErrorType) -> Void)
 }
 
 
@@ -18,8 +18,10 @@ struct ArticleDataStore: ArticleDataStoreProtocol {
     
     private let disposeBag = DisposeBag()
     
-    func getArticleList(success: @escaping ([Article]) -> Void, failure: @escaping (String, ErrorResponse.ErrorType) -> Void) {
-        APIManager.request(request: "items")
+    func getArticleList(searchText: String, success: @escaping ([Article]) -> Void, failure: @escaping (String, ErrorResponse.ErrorType) -> Void) {
+        let param = searchText.isEmpty ? nil : JSONEncoder.makeParameters(param: ItemQueryParameters(query: searchText))
+        
+        APIManager.request(request: "items", param: param)
             .subscribe(onNext: { result in
                 success(result)
                 
