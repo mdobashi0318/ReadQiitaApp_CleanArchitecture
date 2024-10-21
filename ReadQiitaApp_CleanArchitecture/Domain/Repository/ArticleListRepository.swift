@@ -23,7 +23,8 @@ struct ArticleListRepository: ArticleListRepositoryProtocol {
             dataStore.getArticleList(searchText: searchText, success: {
                 observable.onNext($0)
                 
-            }, failure: { _, _ in
+            }, failure: { message, type in
+                observable.onError(APIError(message: message, type: type))
                 
             })
             

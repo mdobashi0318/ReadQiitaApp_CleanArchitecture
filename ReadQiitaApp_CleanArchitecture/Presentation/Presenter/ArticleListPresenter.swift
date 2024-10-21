@@ -31,6 +31,9 @@ class ArticleListPresenter: ArticleListPresenterProtocol {
                     self.model = $0
                     observable.onNext(Void())
                     
+                }, onError: {
+                    observable.onError($0)
+                    
                 })
                 .disposed(by: self.disposeBag)
             

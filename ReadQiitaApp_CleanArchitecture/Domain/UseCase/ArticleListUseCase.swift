@@ -23,6 +23,8 @@ struct ArticleListUseCase: ArticleListUseCaseProtocol {
                 .subscribe(onNext: {
                     let translater = ArticleListTranslater()
                     observable.onNext(translater.translaterArticleRow(articles: $0))
+                }, onError: {
+                    observable.onError($0)
                 })
             
             return Disposables.create()

@@ -90,6 +90,13 @@ class ArticleListViewController: UIViewController {
             .subscribe(onNext: {
                 self.tableView.reloadData()
                 Indicator.dismiss()
+            }, onError: { error in
+                Indicator.dismiss()
+                if let apiError = error as? APIError {
+                    AlertManager.showAlert(self, type: .retry, message: apiError.message, didTapPositiveButton: { _ in
+                        self.fetchArticles()
+                    })
+                }
             })
             .disposed(by: disposeBag)
     }
