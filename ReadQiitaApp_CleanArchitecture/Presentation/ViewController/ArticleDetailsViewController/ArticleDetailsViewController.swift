@@ -124,7 +124,10 @@ extension ArticleDetailsViewController: ArticleDetailsPresenterDelegate {
     }
     
     func addSuccess() {
-        modeChange(mode: .delete)
+        AlertManager.showAlert(self, type: .ok, message: "ブックマークに追加しました", didTapPositiveButton: { _ in
+            self.modeChange(mode: .delete)
+        })
+        
     }
     
     func addFailure(error: DBError) {
@@ -132,7 +135,9 @@ extension ArticleDetailsViewController: ArticleDetailsPresenterDelegate {
     }
     
     func deleteSuccess() {
-        modeChange(mode: .add)
+        AlertManager.showAlert(self, type: .ok, message: "ブックマークから削除しました", didTapPositiveButton: { _ in
+            self.modeChange(mode: .add)
+        })
     }
     
     func deleteFailure(error: DBError) {
