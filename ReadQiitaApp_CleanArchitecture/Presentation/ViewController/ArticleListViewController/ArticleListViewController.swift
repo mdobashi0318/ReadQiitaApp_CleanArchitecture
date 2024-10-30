@@ -63,7 +63,6 @@ class ArticleListViewController: UIViewController {
         searchController.searchBar.rx
             .searchButtonClicked
             .subscribe(onNext: {
-                print("text: \(self.presenter.searchText.value)")
                 self.fetchArticles()
             })
             .disposed(by: disposeBag)
@@ -89,6 +88,7 @@ class ArticleListViewController: UIViewController {
         presenter.fetchArticles()
             .subscribe(onNext: {
                 self.tableView.reloadData()
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
                 Indicator.dismiss()
             }, onError: { error in
                 Indicator.dismiss()
