@@ -66,6 +66,15 @@ class ArticleListViewController: UIViewController {
                 self.fetchArticles()
             })
             .disposed(by: disposeBag)
+        
+        
+        searchController.searchBar.rx
+            .cancelButtonClicked
+            .subscribe(onNext: {
+                self.fetchArticles()
+            })
+            .disposed(by: disposeBag)
+        
     }
     
     
